@@ -1,82 +1,111 @@
-import Head from 'next/head'
+import Head from 'next/head';
+import Banner from '../components/Banner';
+import FooterContainer from '../components/FooterContainer';
+import Header from '../components/Header';
+import LargeCard from '../components/LargeCard';
+import MediumCard from '../components/MediumCard';
+import SmallCard from '../components/SmallCard';
 
-export default function Home() {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+export default function Home({ exploreData, cardData }) {
+	return (
+		<div className="">
+			<Head>
+				<title>AirBnB by oluwatosin_isijola</title>
+				<link rel="icon" href="/vercel.svg" />
+			</Head>
 
-      <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
+			<Header />
+			<Banner />
+			<main className="max-w-7xl mx-auto px-8 sm:px-16">
+				<section className="pt-6">
+					<h2 className="text-4xl font-semibold pb-5">Explore nearby</h2>
+					{/* <pre>{JSON.stringify(exploreData, null, 2)}</pre> */}
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+						{exploreData?.map((item, idx) => (
+							<SmallCard
+								key={idx}
+								img={item.img}
+								location={item.location}
+								distance={item.distance}
+							/>
+						))}
+					</div>
+				</section>
+				<section>
+					<h2 className="text-4xl font-semibold py-8">Live Anywhere</h2>
+					<div className="flex space-x-3 overflow-x-scroll scrollbar scrollbar-thumb-gray-100 scrollbar-track-white scrollbar-thumb-rounded-full scrollbar-track-rounded-full p-3 -ml-3 pb-[30px]">
+						{cardData.map((item, idx) => (
+							<MediumCard key={idx} img={item.img} title={item.title} />
+						))}
+					</div>
+				</section>
+				<section>
+					<LargeCard
+						img="https://a0.muscache.com/im/pictures/2da67c1c-0c61-4629-8798-1d4de1ac9291.jpg?im_w=1440"
+						title="The Greatest Outdoors"
+						description="Wishlists curated by Airbnb."
+						buttonText="Get Inspired"
+					/>
+				</section>
+			</main>
+			<div className="grid grid-cols-1 md:grid-cols-4 gap-y-10 bg-gray-100 py-14 px-32 items-center">
+				<FooterContainer
+					title="About"
+					data={[
+						'How Airbnb works',
+						'Newsroom',
+						'Investors',
+						'Airbnb Plus',
+						'Airbnb Luxe',
+					]}
+				/>
+				<FooterContainer
+					title="Community"
+					data={[
+						'Accessibility',
+						'This is not a real site',
+						'Its a pretty awesome clone',
+						'Referrals accepted',
+						"Let's clone together",
+					]}
+				/>
+				<FooterContainer
+					title="Host"
+					data={[
+						'React Doc',
+						'Presents',
+						'Zero to Full Stack Dev',
+						'Component UI',
+						'Start using now',
+					]}
+				/>
+				<FooterContainer
+					title="Support"
+					data={[
+						'Help Center',
+						'Trust & Safety',
+						'Say Hi Youtube',
+						'Easter Eggs',
+						'For the Win',
+					]}
+				/>
+			</div>
+		</div>
+	);
+}
 
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="p-3 font-mono text-lg bg-gray-100 rounded-md">
-            pages/index.js
-          </code>
-        </p>
+export async function getStaticProps() {
+	const exploreData = await fetch('https://jsonkeeper.com/b/4G1G').then((res) =>
+		res.json()
+	);
 
-        <div className="flex flex-wrap items-center justify-around max-w-4xl mt-6 sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className="flex items-center justify-center w-full h-24 border-t">
-        <a
-          className="flex items-center justify-center"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="h-4 ml-2" />
-        </a>
-      </footer>
-    </div>
-  )
+	const cardData = await fetch('https://jsonkeeper.com/b/VHHT').then((res) =>
+		res.json()
+	);
+	return {
+		props: {
+			exploreData,
+			cardData,
+		},
+	};
 }
