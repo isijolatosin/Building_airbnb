@@ -9,12 +9,28 @@ import InfoCard from '../components/InfoCard';
 
 function Search({ searchResults }) {
 	const [showList, setShowList] = React.useState(false);
+	const [filteredSearchResult, setFilteredSearchResult] = React.useState([]);
 	const router = useRouter();
 	const { location, startDate, endDate, numberOfGuests } = router.query;
+
+	React.useEffect(() => {
+		let newArr = [];
+		searchResults.filter((item, idx) => {
+			if (numberOfGuests === '0') return;
+			if (item.description.charAt(0) === numberOfGuests) {
+				newArr.push(item);
+			}
+			// console.log(newArr);
+		});
+		setFilteredSearchResult(newArr);
+	}, [numberOfGuests]);
+
+	// console.log(filteredSearchResult);
 
 	const formattedStartDate = format(new Date(startDate), 'dd MMMM yyyy'); // if you write M you will have the month in one digit number, MM you will have the month in 2 digit number, MMM you will have the month in 3 letters and MMMM you will have the month in full letter
 	const formattedEndDate = format(new Date(endDate), 'dd MMMM yyyy');
 	const range = `${formattedStartDate} - ${formattedEndDate}`;
+
 	return (
 		<div className="h-screen">
 			<Header
@@ -22,7 +38,7 @@ function Search({ searchResults }) {
 					numberOfGuests > 1 ? 'guests' : 'guest'
 				}`}
 			/>
-			<main className="flex">
+			<div className="flex">
 				<section className="relative flex-grow pt-14 px-4">
 					<div>
 						{numberOfGuests > 1 ? (
@@ -54,27 +70,36 @@ function Search({ searchResults }) {
 						onClick={() => setShowList(!showList)}
 						className="lg:hidden absolute right-0 top-0 h-8 cursor-pointer text-red-400 mr-4 mt-2"
 					/>
-					<div className="flex flex-col">
-						{searchResults.map(
-							(
-								{ img, location, description, title, star, price, total },
-								idx
-							) => (
-								<InfoCard
-									key={idx}
-									description={description}
-									img={img}
-									title={title}
-									location={location}
-									star={star}
-									price={price}
-									total={total}
-								/>
-							)
-						)}
-					</div>
 				</section>
-			</main>
+			</div>
+			<div className="flex flex-col px-4 ">
+				{numberOfGuests !== '0' &&
+					filteredSearchResult.map((item, idx) => (
+						<InfoCard
+							key={idx}
+							description={item.description}
+							img={item.img}
+							title={item.title}
+							location={item.location}
+							star={item.star}
+							price={item.price}
+							total={item.total}
+						/>
+					))}
+				{numberOfGuests === '0' &&
+					searchResults.map((item, idx) => (
+						<InfoCard
+							key={idx}
+							description={item.description}
+							img={item.img}
+							title={item.title}
+							location={item.location}
+							star={item.star}
+							price={item.price}
+							total={item.total}
+						/>
+					))}
+			</div>
 			<Footer />
 		</div>
 	);

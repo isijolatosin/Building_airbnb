@@ -15,7 +15,7 @@ import { useRouter } from 'next/dist/client/router';
 
 function Header({ placeholder }) {
 	const [searchInput, setSearchInput] = React.useState('');
-	const [numberOfGuests, setNumberOfGuests] = React.useState(1);
+	const [numberOfGuests, setNumberOfGuests] = React.useState('0');
 	const [startDate, setStartDate] = React.useState(new Date());
 	const [endDate, setEndDate] = React.useState(new Date());
 	const router = useRouter();
